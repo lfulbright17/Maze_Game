@@ -55,28 +55,38 @@ void loop()                     // run over and over again
   {
     if (xcoord < 7)
       xcoord++;
-    if (xcoord > 7)
+    else
       xcoord = 0;
   }
-    
-   CheckButtonsPress();
-   if(Button_Left)
+
+  if (Button_Left)
+  {
+    if (xcoord > 0)
+      xcoord--;
+    else 
+      xcoord = 7;
+  }
+  
+  if (Button_Up)
   {
     if (ycoord < 7)
       ycoord++;
-    if (ycoord > 7)
+    else
       ycoord = 0;
-    
+  }
+  
+  if (Button_Down)
+  {
+    if (ycoord > 0)
+      ycoord--;
+    else
+      ycoord = 7;
   }
   
   DrawPx(xcoord, ycoord, DimAqua); //Draw Dot
   DisplaySlate();
   delay(150);
   ClearSlate();
-  
-  
-  
-  
   
 }
 
