@@ -55,7 +55,7 @@ void loop()                     // run over and over again
   CheckButtonsPress();
   if (Button_Right)
   {
-    if (xcoord > 0)
+    if (xcoord < 7)
       {
         if(ReadPx(xcoord+1, ycoord)==Red)
         {
@@ -85,13 +85,13 @@ void loop()                     // run over and over again
       }
     else
     {
-      xcoord = 7;
+      xcoord = 0;
     }     
   }
   
   if (Button_Up)
   {
-    if (ycoord > 0)
+    if (ycoord < 7)
       {
         if(ReadPx(xcoord, ycoord+1)==Red)
         {
@@ -121,23 +121,22 @@ void loop()                     // run over and over again
       }
     else
     {
-      ycoord = 7;
+      ycoord = 0;
     }     
   }
   
   DrawPx(xcoord, ycoord, DimAqua); //Draw Dot
   DisplaySlate();
-  delay(150);
-  ClearSlate();
   OBSTACLES();
-  DisplaySlate(); 
+  DisplaySlate();
+ 
+  if(ReadPx(xcoord+1, ycoord+1)==DimAqua);
+    {DrawPx(xcoord, ycoord, Green);
+    }
 }
 
 void OBSTACLES()
 {
   DrawPx(2, 4, Red);  
 }
-
-
-
 
