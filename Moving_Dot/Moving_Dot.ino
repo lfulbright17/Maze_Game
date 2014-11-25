@@ -64,6 +64,10 @@ void loop()                     // run over and over again
         {
           xcoord++;
         }
+        if(ReadPx(xcoord, ycoord)==Green)
+        {
+          GAMEOVER();
+        }
       }
     else
     {
@@ -81,6 +85,10 @@ void loop()                     // run over and over again
         else 
         {
           xcoord--;
+        }
+        if(ReadPx(xcoord, ycoord)==Green)
+        {
+          GAMEOVER();
         }
       }
     else
@@ -100,6 +108,10 @@ void loop()                     // run over and over again
         {
           ycoord++;
         }
+        if(ReadPx(xcoord, ycoord)==Green)
+        {
+          GAMEOVER();
+        }
       }
     else
     {
@@ -118,6 +130,10 @@ void loop()                     // run over and over again
         {
           ycoord--;
         }
+        if(ReadPx(xcoord, ycoord)==Green)
+        {
+          GAMEOVER();
+        }
       }
     else
     {
@@ -125,18 +141,80 @@ void loop()                     // run over and over again
     }     
   }
   
-  DrawPx(xcoord, ycoord, DimAqua); //Draw Dot
+  START();
   DisplaySlate();
-  OBSTACLES();
-  DisplaySlate();
- 
-  if(ReadPx(xcoord+1, ycoord+1)==DimAqua);
-    {DrawPx(xcoord, ycoord, Green);
+  
+  if(ReadPx(xcoord+1, ycoord+1)==0);
+    {
+      DrawPx(xcoord, ycoord, Green);
     }
+  
+  
 }
 
 void OBSTACLES()
 {
-  DrawPx(2, 4, Red);  
+  DrawPx(2, 4, Red); 
+  DrawPx(2, 3, Red);
+  DrawPx(2, 2, Red);
+  
+  DrawPx(2, 6, Red);
+  DrawPx(2, 7, Red);
+  DrawPx(3, 6, Red);
+  DrawPx(3, 7, Red);
+  
+  
+  DrawPx(6, 1, Red);
+  DrawPx(6, 2, Red);
+  DrawPx(6, 3, Red);
+  DrawPx(6, 4, Red);
+  DrawPx(6, 5, Red);
+  DrawPx(6, 6, Red);
+  DrawPx(6, 7, Red);
 }
+
+void ENDONE()
+{
+  DrawPx(7, 7, Yellow); 
+}
+
+void ENEMIES()
+{
+  DrawPx(3, 2, Blue); 
+}
+
+void GAMEOVER()
+{
+  Tone_Start(ToneC5, 100);
+  delay(100);
+  Tone_Start(ToneB5, 100);
+  delay(100);
+  Tone_Start(ToneA5, 100);
+  delay(1000);
+  ClearSlate();
+  NEWSTART();
+}
+
+void START()
+{
+  DrawPx(xcoord, ycoord, DimAqua);
+  DisplaySlate();
+  OBSTACLES();
+  DisplaySlate();
+  ENDONE();
+  DisplaySlate();
+}
+
+void NEWSTART()
+{
+  ClearSlate();
+  xcoord = 3;
+  ycoord = 4;
+  DisplaySlate();
+  OBSTACLES();
+  DisplaySlate();
+  ENDONE();
+  DisplaySlate();
+}
+
 
