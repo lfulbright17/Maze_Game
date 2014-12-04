@@ -1,7 +1,10 @@
 /*
-  Moving_Dot.pde
+  Moving_Dot.pde By Lee-Won Fulbright
  
- * Adapted from "Blink,"  The basic Arduino example.  
+  Adapted from "Blink,"  The basic Arduino example.
+  
+  Try to turn every px green before you get to the orange px, without
+  running over your trail of green "enemies" or red obstacles. 
 
 */
 
@@ -11,20 +14,19 @@
 int xcoord = 3;
 int ycoord = 4;
 int level = 1;
-
-
+int lights = 2; //mr kiang's suggestion for how to make my lights add on each level
 
 
 void setup()                    // run once, when the sketch starts
 {
   MeggyJrSimpleSetup();   // Required code, line 2 of 2.
   SetAuxLEDs(0);
-  
-
 }
 
 void loop()                     // run over and over again
 {
+  Serial.print(lights);
+  SetAuxLEDs(lights-1);
   CheckButtonsPress();
   if (Button_Right)
   {
@@ -61,16 +63,17 @@ void loop()                     // run over and over again
           delay(100);
           ClearSlate();
           level++;
+          lights *= 2;
           if(level==4)
             {
-              WINNINGSCREEN();
+              WINNINGSCREEN(); //makes a noise then takes you back to lv. 1
             }
         }
         if(ReadPx(xcoord, ycoord)==Orange)
         {
           if(isThereBlack()==true)
           {
-            GAMEOVER();
+            GAMEOVER(); //restart the level you're on
           }
         }
       }
@@ -99,7 +102,7 @@ void loop()                     // run over and over again
         { 
           if(level==1)
             {
-              Tone_Start(ToneC6, 100);
+              Tone_Start(ToneC6, 100); //sound to signal next level
               delay(100);
             }
           if(level==2)
@@ -115,6 +118,7 @@ void loop()                     // run over and over again
           delay(100);
           ClearSlate();
           level++;
+          lights *= 2;
           if(level==4)
             {
               WINNINGSCREEN();
@@ -122,7 +126,7 @@ void loop()                     // run over and over again
         }
         if(ReadPx(xcoord, ycoord)==Orange)
         {
-          if(isThereBlack()==true)
+          if(isThereBlack()==true) //if you try to get to the orange w/o filling the screen first you die
           {
             GAMEOVER();
           }
@@ -169,6 +173,7 @@ void loop()                     // run over and over again
           delay(100);
           ClearSlate();
           level++;
+          lights *= 2;
           if(level==4)
             {
               WINNINGSCREEN();
@@ -224,6 +229,7 @@ void loop()                     // run over and over again
           delay(100);
           ClearSlate();
           level++;
+          lights *= 2;
           if(level==4)
             {
               WINNINGSCREEN();
@@ -242,7 +248,6 @@ void loop()                     // run over and over again
       ycoord = 0;
     }     
   }
-  
 
   if(level==1)
     {
@@ -260,22 +265,11 @@ void loop()                     // run over and over again
     }
   if(ReadPx(xcoord+1, ycoord+1)==0);
     {
-      DrawPx(xcoord, ycoord, Green);
+      DrawPx(xcoord, ycoord, Green); //the green dots that follow you are the enemies
     }
-  
-  
-  
- 
-  
-  
-  
-  
-  
-   
 }
 
-
-void OBSTACLES1()
+void OBSTACLES1() //you die if you touch the red obstacles in each level
 {
   DrawPx(2, 4, Red); 
   DrawPx(2, 3, Red);
@@ -335,7 +329,7 @@ void OBSTACLES3()
 
 }
 
-void END()
+void END() //the orange "goal space" that you want to get to after filling the screen w/ green
 {
   DrawPx(7, 7, Orange); 
 }
@@ -348,14 +342,7 @@ void END3()
   DrawPx(7, 4, Orange);
 }
 
-void ENEMIES()
-{
-  DrawPx(3, 2, Blue);
-   delay(100);
-  ClearSlate(); 
-}
-
-void GAMEOVER()
+void GAMEOVER() //clears the slate of whatever level you're on
 {
   Tone_Start(ToneC5, 100);
   delay(100);
@@ -367,18 +354,24 @@ void GAMEOVER()
   if(level==1)
   {
     NEWSTART1();
+    SetAuxLEDs(1);
   }
   if(level==2)
   {
     NEWSTART2();
+    SetAuxLEDs(1);
+    SetAuxLEDs(2);
   }
   if(level==3)
   {
     NEWSTART3();
+    SetAuxLEDs(1);
+    SetAuxLEDs(2);
+    SetAuxLEDs(4);
   }
 }
 
-void WINNINGSCREEN()
+void WINNINGSCREEN() //after completing level 3, restarts the game
 {
   Tone_Start(ToneA5, 100);
   delay(1000);
@@ -395,8 +388,10 @@ void WINNINGSCREEN()
 }
   
 
-void START()
+void START() //when the meggy is reset
 {
+  SetAuxLEDs(1);
+  DisplaySlate();
   DrawPx(xcoord, ycoord, DimAqua);
   DisplaySlate();
   END();
@@ -405,7 +400,7 @@ void START()
   DisplaySlate();
 }
 
-void NEWSTART1()
+void NEWSTART1() //after gameover in level 1
 {
   ClearSlate();
   xcoord = 3;
@@ -417,7 +412,7 @@ void NEWSTART1()
   DisplaySlate();
 }
 
-void NEWSTART2()
+void NEWSTART2() //after gameover in level 2
 {
   ClearSlate();
   xcoord = 7;
@@ -429,7 +424,7 @@ void NEWSTART2()
   DisplaySlate();
 }
 
-void NEWSTART3()
+void NEWSTART3() //after gameover in level 3
 {
   ClearSlate();
   xcoord = 3;
@@ -452,7 +447,7 @@ void level2()
   
 } 
 
-void level3()
+void level3() //final level
 {
   DrawPx(xcoord, ycoord, DimAqua);
   DisplaySlate();
@@ -463,7 +458,7 @@ void level3()
   
 } 
 
-boolean isThereBlack()
+boolean isThereBlack() //thanks to mr. kiang for helping me with this code!!!
 {
   for (int x = 0; x < 8; x++)
     {
